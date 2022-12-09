@@ -1,0 +1,7 @@
+#!/bin/bash
+
+query=$1
+echo $query
+query=${query//[ ]/"+"}
+
+brave-browser "hhttps://search.brave.com/search\?q=$query"
