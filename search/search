@@ -4,4 +4,4 @@ query=$1
 echo $query
 query=${query//[ ]/"+"}
 
-brave-browser "https://search.brave.com/search\?q=$query"
+brave-browser "https://search.brave.com/search\?q=$query" &
