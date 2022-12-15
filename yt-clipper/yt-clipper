@@ -1,0 +1,49 @@
+#!/bin/bash
+
+
+if [ $# -lt 1 ]
+then
+    echo "yt-clipper needs an url as an argument"
+    exit 1
+fi
+
+st=-1
+nd=-1
+
+outputName=output.mkv
+
+while test $# -gt 0; do
+    case "$1" in
+	-o) shift
+	    outputName="$1"
+	    shift;;
+	-s) shift
+	    st="$1"
+	    shift;;
+	-e) shift
+	    nd="$1"
+	    shift;;
+	*) url=$(youtube-dl -g $1)
+	   shift;; 
+    esac
+done 
+
+arr=(${url//[ ]/})
+video=${arr[0]}
+audio=${arr[1]}
+
+if [[ $st != -1 ]] && [[ $en != -1 ]]
+then
+    ffmpeg -ss $st -t $nd  -i $video -ss $st -t $nd -i $audio -map 0:v -map 1:a -c:v copy -c:a copy $outputName
+    
+elif [[ $st == -1 ]] && [[ $en != -1 ]]
+then
+    ffmpeg -t $nd  -i $video -t $nd -i $audio -map 0:v -map 1:a -c:v copy -c:a copy $outputName
+    
+elif [[ $st == -1 ]] && [[ $en == -1 ]]
+then
+    ffmpeg -i $video -i $audio -map 0:v -map 1:a -c:v copy -c:a copy $outputName
+    
+fi
+
+
