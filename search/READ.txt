@@ -1,1 +1,2 @@
-This tool allows you to launch a Brave-browser search from the command line. 
+This tool allows you to launch brave search from the command line
+using the default browser
