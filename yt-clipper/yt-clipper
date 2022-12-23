@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# test if pre-reqs are intalled
+
+command -v youtube-dl > /dev/null
+
+if [ $? == 1 ]
+then
+    echo "youtube-dl is not installed. Try installing using apt, yum, nala, etc.."
+    exit 1
+fi
+
+command -v ffmpeg > /dev/null
+
+if [ $? == 1 ]
+then
+    echo "ffmpeg is not installed. Try installing using apt, yum, nala, etc.."
+    exit 1
+fi
+
 
 if [ $# -lt 1 ]
 then
@@ -7,14 +25,32 @@ then
     exit 1
 fi
 
-st=-1
-nd=-1
+st=-1 # when to start recording
+nd=-1 # when to end recording
 
 outputName=output.mkv
 
 while test $# -gt 0; do
     case "$1" in
-	-o) shift
+	-h) echo "usage:"
+	    echo "    yt-clipper <youtube video url> [options]"
+	    echo ;
+	    echo "Options"
+	    echo " -h display this message"
+	    echo ; 
+	    echo " -o output file name (include extension)"
+	    echo ;
+	    echo " -s when to start clipping the video"
+	    echo "    use HH:MM:SS.S format"
+	    echo ; 
+	    echo " -e When to stop clipping the video"
+	    echo "    use HH:MM:SS.S format"
+	    echo ;
+	    echo "Example"
+	    echo "    yt-clipper https://youtu.be/aSk-D86aOtc -o oceanWaves.mkv -e 00:00:45.0"
+	    echo ; 
+	    exit 0;;
+	-o) shift   # output file name
 	    outputName="$1"
 	    shift;;
 	-s) shift
@@ -29,6 +65,9 @@ while test $# -gt 0; do
 done 
 
 arr=(${url//[ ]/})
+
+
+
 video=${arr[0]}
 audio=${arr[1]}
 
