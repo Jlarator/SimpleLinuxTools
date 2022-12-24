@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# edit this to the video name you want to use
+videoName="oceanWaves2.mp4"       
+                                  
+# grab the script name
+scriptName="$( basename $0 )"
+
+# get full path to script 
+scriptPath="$( which $scriptName )"
+
+# get the directory path
+directory=${scriptPath//"screensaver/$scriptName"/"screensaver/"}
+
+# get the video path
+videoNamePath="${directory}/${videoName}"  # <- edit this if video is in a different directory
+
+# $javaFx is the path to javafx library
+java  --module-path $javaFx --add-modules javafx.fxml,javafx.controls,javafx.graphics,javafx.media -cp $directory screenSaver $videoNamePath > /dev/null
