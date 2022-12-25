@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# edit this to the video name you want to use
-videoName="oceanWaves2.mp4"       
-                                  
-# grab the script name
+videoName="oceanWaves2.mp4"       # <- edit this to chage video name 
+
+# this allows the user to rename the script file name
+# and without breaking the script
 scriptName="$( basename $0 )"
 
 # get full path to script 
@@ -17,3 +17,32 @@ videoNamePath="${directory}/${videoName}"  # <- edit this if video is in a diffe
 
 # $javaFx is the path to javafx library
 java  --module-path $javaFx --add-modules javafx.fxml,javafx.controls,javafx.graphics,javafx.media -cp $directory screenSaver $videoNamePath > /dev/null
+
+if [ $? ==  2 ] # if screenSaver failed because unsopported format. 
+then
+    newVideoName=${videoName%.*}_supported_format.mp4	
+    echo; 
+    echo The current file \($videoName\) you are trying to use is not supported.
+    echo Would you like to produce a new supported file \(with name $newVideoName\)? [Y/N]    
+    read answer
+
+    if [ $answer == Y ] || [ $answer == y ]       
+    then 
+
+	command -v ffmpeg -> /dev/null 
+
+	if [ $? == 1 ]
+	then
+	    echo "ffmpeg is not installed. It is needed to make the new file. Try installing using apt, yum, nala, etc.."
+	    exit 0
+	fi
+	
+	ffmpeg -i $videoName -vcodec libx264 -acodec aac $newVideoName
+
+	if [ -f $newVideoName ]
+	then
+	    echo Edit the $scriptName \( line 3 \) to reflect the new video name.
+	fi
+    fi
+fi
+   

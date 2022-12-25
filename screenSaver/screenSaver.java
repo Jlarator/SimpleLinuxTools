@@ -9,12 +9,12 @@ import javafx.stage.StageStyle;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.media.MediaException;
 import java.io.File;
 import java.awt.Toolkit;
 import javafx.util.Duration;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
-
 
 public class screenSaver extends Application {
 
@@ -34,10 +34,20 @@ public class screenSaver extends Application {
 	    this.fileName = this.getParameters().getRaw().get(0); 
 	}
 
-	File file = new File(this.fileName);
-	System.out.println(file.toURI().toString());
+	File file = null;
+	Media media = null;
 	
-	Media media = new Media(file.toURI().toString());
+	try{
+	    file = new File(this.fileName);	
+	    media = new Media(file.toURI().toString());
+
+	}catch (MediaException err) {
+
+	    handleMediaException(err.toString());
+	    
+	    System.exit(1); 
+	}
+	
 	player = new MediaPlayer(media);
 	player.setOnEndOfMedia(() -> {
 		System.out.println("looping..");
@@ -65,7 +75,7 @@ public class screenSaver extends Application {
         primaryStage.show();
 	
 	player.play(); 
-	
+
     }
     
     public static void main(String[] args) {
@@ -74,13 +84,30 @@ public class screenSaver extends Application {
 
     public void exitSuccess() {
 	    player.dispose(); 
-	    Platform.exit(); 
+	    Platform.exit();
+	    System.exit(0); 
     }
     
-    public void processEvent(KeyEvent event){
-	
+    public void processEvent(KeyEvent event){	
         if (event.isAltDown() || event.isMetaDown()){
 	    exitSuccess(); 
 	}
     }
+
+    public void handleMediaException(String err){
+
+	System.err.println(err);
+
+	if (err.contains("MEDIA_UNAVAILABLE")){
+	    System.err.println(this.fileName + " was not found.\n"+
+			       " - Double check that the file is in the proper directory as "+
+			       "per the README.txt \n"+
+			       " - Make sure you have edited the script as per the README.txt"); 
+
+	} else if (err.contains("MEDIA_UNSUPPORTED")){
+	    System.err.println("Attempting to transform into a supported format");
+	    System.exit(2); 
+	} 
+    }
+    
 }
