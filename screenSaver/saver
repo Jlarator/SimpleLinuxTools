@@ -37,7 +37,7 @@ then
 	    exit 0
 	fi
 	
-	ffmpeg -i $videoName -vcodec libx264 -acodec aac $newVideoName
+	ffmpeg -i "${directory}${videoName}" -vcodec libx264 -acodec aac "${directory}/${newVideoName}"
 
 	if [ -f $newVideoName ]
 	then
