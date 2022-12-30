@@ -107,7 +107,12 @@ public class screenSaver extends Application {
 	} else if (err.contains("MEDIA_UNSUPPORTED")){
 	    System.err.println("Attempting to transform into a supported format");
 	    System.exit(2); 
-	} 
+	} else if (err.contains("UNKNOWN")){
+	    System.err.println("NOTE: check to see if the right codecs are installed \n"+
+			       "try looking at: \n"+
+			       "https://ostechnix.com/how-to-install-multimedia-codecs-in-fedora-linux/ \n\n"+
+			       "https://ostechnix.com/how-to-enable-rpm-fusion-repository-in-fedora-rhel/");
+	}
     }
     
 }
