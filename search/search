@@ -5,4 +5,4 @@ query=$1
 echo $query
 query=${query//[ ]/"+"}
 
-xdg-open  "https://search.brave.com/search\?q=$query" 
+xdg-open  "https://search.brave.com/search\?q=$query" &
