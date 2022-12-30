@@ -1,0 +1,31 @@
+#! /bin/bash
+
+if [ $# -lt 1 ]
+then
+    echo "Usage: "
+    echo ;
+    echo " ./compile <media.path> "
+    exit 1
+fi
+
+if [ ! -f $1 ]
+then
+    echo "could not find $1, please enter a valid video name or path"
+    exit 1
+fi
+
+# Get the line that needs to be edited
+videoNameLine="$( grep -n videoName= saver | grep -o [0-9] | head -n 1 )"
+
+# replacement line
+videoName="videoName=$1"
+
+# edit the line, ignore stdout
+sed -i  "$videoNameLine  c  $videoName" saver 1> /dev/null
+
+mkdir screensaver
+
+javac -d screensaver  *.java --module-path $javaFx --add-modules javafx.fxml,javafx.controls,javafx.graphics,javafx.media
+
+cp saver screensaver
+cp $1 screensaver
