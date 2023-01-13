@@ -12,7 +12,7 @@ int main(int argc, char* argv[]){
   }
   
   int lineNumber = atoi(argv[1]);
-  int counter = 0; 
+  int counter = 1; 
   char *fileName = argv[2];
 
   FILE *fileReader = fopen(fileName, "r");
