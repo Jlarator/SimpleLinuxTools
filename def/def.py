@@ -37,9 +37,11 @@ if __name__ == '__main__':
 
     except requests.exceptions.Timeout:
         sys.stderr.write("\tConnection time out\n")
+        print(10 * " -- -- ")        
         sys.exit(1)
     except Exception:
         sys.stderr.write("\t *** Cound not find the definition ")
-    finally:
+        sys.exit(1)
         print(10 * " -- -- ")        
+    print(10 * " -- -- ")        
                          
