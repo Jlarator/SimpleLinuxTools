@@ -34,8 +34,12 @@ if __name__ == '__main__':
                     print(sub.parent.parent.findAll("h6")[0].get_text())
                 if not sub.get_text().strip().isspace():
                     print(f"\t {i + 1}-",sub.get_text().strip())
-        print(10 * " -- -- ")
+
     except requests.exceptions.Timeout:
         sys.stderr.write("\tConnection time out\n")
-        print(10 * " -- -- ")
         sys.exit(1)
+    except Exception:
+        sys.stderr.write("\t *** Cound not find the definition ")
+    finally:
+        print(10 * " -- -- ")        
+                         
